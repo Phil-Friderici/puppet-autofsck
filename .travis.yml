@@ -1,35 +1,51 @@
+---
 language: ruby
-rvm:
-  - 1.8.7
-  - 1.9.3
-  - 2.0.0
-  - 2.1.4
-env:
-  - PUPPET_GEM_VERSION="~> 2.7"
-  - PUPPET_GEM_VERSION="~> 3.3"
-  - PUPPET_GEM_VERSION="~> 3.7" FUTURE_PARSER="yes"
+
+cache: bundler
+
+before_install:
+  - bundle -v
+  - rm Gemfile.lock || true
+  - gem update --system
+  - gem update bundler
+  - gem --version
+  - bundle -v
+
+sudo: false
+
+script: 'SPEC_OPTS="--format documentation" bundle exec rake validate lint spec'
+
 matrix:
-  allow_failures:
-    - rvm: 1.8.7
-      env: PUPPET_GEM_VERSION="~> 3.7" FUTURE_PARSER="yes"
-    - rvm: 1.9.3
-      env: PUPPET_GEM_VERSION="~> 3.7" FUTURE_PARSER="yes"
-    - rvm: 2.0.0
-      env: PUPPET_GEM_VERSION="~> 3.7" FUTURE_PARSER="yes"
-    - rvm: 2.1.4
-      env: PUPPET_GEM_VERSION="~> 3.7" FUTURE_PARSER="yes"
-    - rvm: ruby-head
-  exclude:
-    - rvm: 1.9.3
-      env: PUPPET_GEM_VERSION="~> 2.7"
-    - rvm: 2.0.0
-      env: PUPPET_GEM_VERSION="~> 2.7"
-    - rvm: 2.1.4
-      env: PUPPET_GEM_VERSION="~> 2.7"
   fast_finish: true
+  include:
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3.7.0"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3"
+  - rvm: 1.8.7
+    env: PUPPET_GEM_VERSION="~> 3" FUTURE_PARSER="yes"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3.7.0"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3"
+  - rvm: 1.9.3
+    env: PUPPET_GEM_VERSION="~> 3" FUTURE_PARSER="yes"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3.7.0"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3"
+  - rvm: 2.0.0
+    env: PUPPET_GEM_VERSION="~> 3" FUTURE_PARSER="yes"
+  - rvm: 2.1.9
+    env: PUPPET_GEM_VERSION="~> 3.7.0"
+  - rvm: 2.1.9
+    env: PUPPET_GEM_VERSION="~> 3"
+  - rvm: 2.1.9
+    env: PUPPET_GEM_VERSION="~> 3" FUTURE_PARSER="yes"
+  - rvm: 2.1.9
+    env: PUPPET_GEM_VERSION="~> 4"
+  - rvm: 2.4.1
+    env: PUPPET_GEM_VERSION="~> 5"
+
 notifications:
   email: false
-before_install:
-  - sudo add-apt-repository -y ppa:raphink/augeas
-  - sudo apt-get update -y
-  - sudo apt-get install -y augeas-tools libaugeas-dev libxml2-dev
